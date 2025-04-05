@@ -20,10 +20,10 @@ DiabeticBot is a Retrieval-Augmented Generation (RAG) powered web application de
 |--------------|--------------------------|
 | Frontend     | HTML, CSS, JavaScript (Fetch API) |
 | Backend      | Python, Flask            |
-| LLM & RAG    | LangChain, OpenAI / Gemini |
+| LLM & RAG    | LangChain, OpenAI |
 | Embeddings   | OpenAI Embeddings        |
 | Vector Store | Pinecone                 |
-| Data Source  | PDF documents on diabetes (e.g., NIH guidelines) |
+| Data Source  | PDF documents on diabetes (Textbook of diabetes, https://www.blackwellpublishing.com/content/textbookofdiabetes/downloads/chapters/allchapters.pdf) |
 | Deployment   | Render / localhost       |
 
 ---
