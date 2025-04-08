@@ -30,13 +30,37 @@ form.addEventListener("submit", async (e) => {
 
 function appendMessage(role, text) {
   const div = document.createElement("div");
-  div.className = `p-2 rounded-md ${
-    role === "user" ? "bg-blue-700 text-white self-end" : "bg-gray-700 text-white self-start"
+  div.className = `p-2 rounded-md whitespace-pre-wrap max-w-full break-words ${
+    role === "user" 
+      ? "bg-blue-700 text-white self-end"
+      : "bg-gray-700 text-white self-start prose prose-invert prose-sm"
   }`;
-  div.textContent = text;
+
+  
+  if (role === "bot") {
+    const renderedText = marked.parse(text); 
+    div.innerHTML = renderedText;
+  } else {
+    div.textContent = text;
+  }
+
+
+  const lists = div.querySelectorAll("ul, ol");
+  lists.forEach((list) => {
+    // Apply Tailwind's list styles for both ordered and unordered lists
+    list.classList.add("list-inside", "ml-4");  
+    if (list.tagName === "UL") {
+      list.classList.add("list-disc");  
+    } else {
+      list.classList.add("list-decimal");  
+    }
+  });
+
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
+
+
 
 function removeLastBotPlaceholder() {
   const messages = chat.querySelectorAll(".self-start");

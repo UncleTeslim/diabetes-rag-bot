@@ -16,6 +16,8 @@ import os
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
+conversation_history = []
+
 load_dotenv()
 
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
@@ -51,13 +53,33 @@ def home():
 
 @app.route('/ask', methods=["POST"])
 def ask():
+    global conversation_history
+    
     data = request.get_json()
     question = data.get("question")
+    conversation_history.append(f"User: {question}")
+    
+    
+    context = "\n".join(conversation_history[-5:])  # Limit to last 5 exchanges to avoid too long context
+    prompt_with_context = system_prompt.format(context=context)
 
     print(f"User question:", question)
-
-    response = rag_chain.invoke({"input": question})
-    answer = response["answer"].replace("System:", "DiabeticBot:")
+    
+    
+    casual_phrases = ["thank you", "thanks", "thank you so much",
+                      "goodbye", "bye", "see you", "take care", 
+                      "grateful", "really appreciate", "appreciate it",
+                      "thanks a lot", "thank you very much"]
+    
+    if any(phrase in question.lower() for phrase in casual_phrases):
+        response = "You're welcome! 😊 If you have any other questions, feel free to ask!"
+    else:
+        response = rag_chain.invoke({"input": prompt_with_context})
+        answer = response["answer"].replace("System:", "DiabeticBot:")
+        conversation_history.append(f"DiabeticBot: {answer}")
+        
+        if "Note: This answer is based on general knowledge" not in answer:
+            answer += "\n\n*Bonus Tip: Please remember to always consult with a healthcare provider for any medical advice.*"
 
     print(f"DiabeticBot response: {answer}")
     return jsonify({"answer": answer})
