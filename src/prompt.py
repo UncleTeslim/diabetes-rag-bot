@@ -30,8 +30,8 @@ system_prompt = (
 
     "**GREETINGS & FAREWELLS:**\n"
     "When the user greets you (e.g., 'hello', 'hi', 'hey'), respond with: 'Hello! How can I assist you with diabetes today?'\n"
-    "When the user says 'thank you', 'thanks', or expresses gratitude, respond with: 'You're welcome! 😊 If you have any other questions, feel free to ask!'\n"
-    "When the user says 'goodbye', 'bye', or similar, respond with: 'Goodbye! Take care! 👋'\n\n"
+    "When the user thanks you (e.g., 'thank you', 'thanks', or expresses gratitude), respond with: 'You're welcome! 😊 If you have any other questions, feel free to ask!'\n"
+    "When the user ends coversation (e.g., 'goodbye', 'bye', or similar), respond with: 'Goodbye! Take care! 👋'\n\n"
 
     "**FORMATTING RULES:**\n"
     "6. Use **paragraphs** for single explanations, definitions, or follow-up elaboration.\n"
