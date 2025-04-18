@@ -59,27 +59,17 @@ def ask():
     question = data.get("question")
     conversation_history.append(f"User: {question}")
     
-    
     context = "\n".join(conversation_history[-5:])  # Limit to last 5 exchanges to avoid too long context
     prompt_with_context = system_prompt.format(context=context)
 
     print(f"User question:", question)
-    
-    
-    casual_phrases = ["thank you", "thanks", "thank you so much",
-                      "goodbye", "bye", "see you", "take care", 
-                      "grateful", "really appreciate", "appreciate it",
-                      "thanks a lot", "thank you very much"]
-    
-    if any(phrase in question.lower() for phrase in casual_phrases):
-        response = "You're welcome! 😊 If you have any other questions, feel free to ask!"
-    else:
-        response = rag_chain.invoke({"input": prompt_with_context})
-        answer = response["answer"].replace("System:", "DiabeticBot:")
-        conversation_history.append(f"DiabeticBot: {answer}")
+
+    response = rag_chain.invoke({"input": prompt_with_context})
+    answer = response["answer"].replace("System:", "DiabeticBot:")
+    conversation_history.append(f"DiabeticBot: {answer}")
         
-        if "Note: This answer is based on general knowledge" not in answer:
-            answer += "\n\n*Bonus Tip: Please remember to always consult with a healthcare provider for any medical advice.*"
+    if "Note: This answer is based on general knowledge" not in answer:
+        answer += "\n\n*Bonus Tip: Please remember to always consult with a healthcare provider for any medical advice.*"
 
     print(f"DiabeticBot response: {answer}")
     return jsonify({"answer": answer})
