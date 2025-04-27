@@ -1,6 +1,6 @@
-# 🩺 DiabeticBot – Diabetes Question Answering Chat App (RAG-based)
+# 🩺 DiaWise – Diabetes Question Answering Chat App (RAG-based)
 
-DiabeticBot is a Retrieval-Augmented Generation (RAG) powered web application designed to answer natural language questions about **diabetes**. It leverages **LangChain**, **OpenAI's GPT-4** (or Gemini), and **Pinecone** vector store to retrieve accurate information from a curated PDF dataset of diabetes-related medical content (e.g. NIH or textbooks).
+DiaWise is a Retrieval-Augmented Generation (RAG) powered web application designed to answer natural language questions about **diabetes**. It leverages **LangChain**, **OpenAI's GPT-4** (or Gemini), and **Pinecone** vector store to retrieve accurate information from a curated PDF dataset of diabetes-related medical content (e.g. NIH or textbooks).
 
 ---
 
@@ -16,18 +16,17 @@ DiabeticBot is a Retrieval-Augmented Generation (RAG) powered web application de
 
 ## 🧠 Tech Stack
 
-| Layer        | Tech Used                |
-|--------------|--------------------------|
-| Frontend     | HTML, CSS, JavaScript (Fetch API) |
-| Backend      | Python, Flask            |
-| LLM & RAG    | LangChain, OpenAI |
-| Embeddings   | OpenAI Embeddings        |
-| Vector Store | Pinecone                 |
+| Layer        | Tech Used                                                                                                                                           |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend     | HTML, CSS, JavaScript (Fetch API)                                                                                                                   |
+| Backend      | Python, Flask                                                                                                                                       |
+| LLM & RAG    | LangChain, OpenAI                                                                                                                                   |
+| Embeddings   | OpenAI Embeddings                                                                                                                                   |
+| Vector Store | Pinecone                                                                                                                                            |
 | Data Source  | PDF documents on diabetes (Textbook of diabetes, https://www.blackwellpublishing.com/content/textbookofdiabetes/downloads/chapters/allchapters.pdf) |
-| Deployment   | Render / localhost       |
+| Deployment   | Render / localhost                                                                                                                                  |
 
 ---
-
 
 ---
 
@@ -40,7 +39,6 @@ git clone https://github.com/yourusername/diabeticbot.git
 cd diabeticbot
 ```
 
-
 ### 2. Create & Activate Conda/Virtual Environment
 
 ```bash
@@ -49,12 +47,15 @@ conda activate diabeticbot
 ```
 
 ### 3. Install Requirements
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Set Up Environment Variables
+
 Create a .env file in the root directory:
+
 ```env
 OPENAI_API_KEY=your_openai_key_here
 PINECONE_API_KEY=your_pinecone_key_here
@@ -63,6 +64,7 @@ PINECONE_INDEX_NAME=your_index_name
 ```
 
 ### 5. Run the App
+
 ```bash
 python app.py
 ```
@@ -94,14 +96,13 @@ python app.py
 **Input:**  
 can a diabetic person make baby?
 
+**Output:**
 
-**Output:**  
 ```makefile
-**Output:**  
+**Output:**
 ```
+
 DiabeticBot: Yes, individuals with diabetes can have children. However, managing blood glucose levels before and during pregnancy is crucial to reduce risks for both the parent and the baby.
-
-
 
 ---
 
@@ -131,7 +132,6 @@ You can deploy the app using:
 - [ ] Progressive Web App (PWA) version for mobile access
 
 ---
-
 
 ---
 
