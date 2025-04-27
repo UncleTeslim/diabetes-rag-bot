@@ -1,5 +1,5 @@
 Flask
-python-dotenv=
+python-dotenv
 pinecone-client
 langchain
 langchain-openai
