@@ -3,36 +3,223 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diabetes Assistant</title>
+    <title>Welcome | DiaWise</title>
+    <link rel="icon" href="/static/favicon.png" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body
-    class="bg-gray-900 text-white font-sans h-screen flex flex-col items-center justify-between px-4 py-6"
+    class="bg-gradient-to-b from-[#0f172a] to-[#1A1E24] text-white font-sans min-h-screen flex flex-col justify-between"
   >
-    <h1 class="text-3xl font-bold mb-4">Diabetes RAG Chat Assistant</h1>
 
-    <div
-      id="chat"
-      class="w-full max-w-2xl h-[60vh] overflow-y-auto bg-gray-800 rounded-xl p-4 shadow-md mb-4 space-y-4"
+    <main
+      class="flex flex-col items-center justify-center text-center px-6 py-20 space-y-8 animate-fade-in"
     >
-      <!-- Messages will be appended here -->
-    </div>
-
-    <form id="chat-form" class="w-full max-w-2xl flex">
-      <input
-        type="text"
-        id="user-input"
-        placeholder="Ask me something..."
-        class="flex-grow rounded-l-xl px-4 py-2 text-gray-900 focus:outline-none"
+      <img
+        src="/static/favicon.png"
+        alt="DiaWise Logo"
+        class="w-24 h-24 mb-6 rounded-full border-4 border-blue-300 drop-shadow-lg"
       />
-      <button
-        type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-xl"
+      <h1
+        class="text-5xl sm:text-6xl font-extrabold tracking-tight text-blue-300 drop-shadow-xl animate-slide-in"
       >
-        Send
-      </button>
-    </form>
+        Welcome to DiaWise
+      </h1>
+      <p
+        class="max-w-2xl text-xl sm:text-2xl text-gray-300 animate-slide-in delay-200"
+      >
+        Your AI companion for trustworthy, helpful, and clear diabetes
+        information. Built with care, for real impact.
+      </p>
+      <a
+        href="/ask"
+        class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in delay-400"
+      >
+        Chat with DiaWise
+      </a>
+    </main>
+
+
+    <section
+      id="about"
+      class="py-20 px-6 bg-[#1A1E24] text-center animate-fade-in delay-500"
+    >
+      <h2
+        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-6"
+      >
+        About DiaWise
+      </h2>
+      <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">
+        DiaWise is designed to be a reliable and accessible source of diabetes
+        information. Whether you're newly diagnosed or just looking to stay
+        informed, DiaWise provides clear, accurate, and actionable insights
+        powered by AI.
+      </p>
+    </section>
+
+  
+    <section
+      id="features"
+      class="bg-[#14171c] py-20 px-6 text-center animate-fade-in delay-700"
+    >
+      <h2
+        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-12"
+      >
+        Features
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+        <div class="space-y-4 animate-slide-up">
+          <svg
+            class="w-16 h-16 mx-auto text-blue-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7h3M13 11h3m-3 4h3m3-4v2a9 9 0 11-9 9h2a7 7 0 10 7-7V9a9 9 0 11-9 9H8a7 7 0 1014 0V9z"
+            ></path>
+          </svg>
+          <h3 class="text-2xl font-semibold text-white">Instant Answers</h3>
+          <p class="text-lg text-gray-300">
+            Get fast, reliable answers to your diabetes-related questions.
+          </p>
+        </div>
+        <div class="space-y-4 animate-slide-up delay-200">
+          <svg
+            class="w-16 h-16 mx-auto text-blue-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12h3l-4 4m0 0l4 4m-4-4l-4-4m0 0h3l-4 4m0 0l-4-4"
+            ></path>
+          </svg>
+          <h3 class="text-2xl font-semibold text-white">Personalized Advice</h3>
+          <p class="text-lg text-gray-300">
+            Receive personalized recommendations based on your specific needs.
+          </p>
+        </div>
+        <div class="space-y-4 animate-slide-up delay-400">
+          <svg
+            class="w-16 h-16 mx-auto text-blue-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 11V6h3V4h5v2h3v5h-3v6h-3v-6h-3z"
+            ></path>
+          </svg>
+          <h3 class="text-2xl font-semibold text-white">24/7 Availability</h3>
+          <p class="text-lg text-gray-300">
+            Access diabetes information anytime, anywhere.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section
+      id="testimonials"
+      class="bg-[#0f172a] py-20 px-6 text-center animate-fade-in delay-900"
+    >
+      <h2
+        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-6"
+      >
+        What Users Are Saying
+      </h2>
+      <div class="space-y-8">
+        <blockquote class="text-lg text-gray-300">
+          "DiaWise has been a lifesaver! The information is clear, and it’s so
+          easy to use. It has helped me better understand my condition."
+          <br /><span class="text-blue-400 font-semibold">— Sarah M.</span>
+        </blockquote>
+        <blockquote class="text-lg text-gray-300">
+          "The personalized advice I received helped me make better decisions
+          about my diet and lifestyle. Highly recommend!"
+          <br /><span class="text-blue-400 font-semibold">— John P.</span>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- CALL TO ACTION SECTION -->
+    <section
+      id="cta"
+      class="bg-blue-600 py-20 px-6 text-center animate-fade-in delay-1200"
+    >
+      <h2
+        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4"
+      >
+        Ready to Get Started?
+      </h2>
+      <p class="text-lg sm:text-xl text-gray-100 mb-6">
+        Chat with DiaWise today and take control of your diabetes journey.
+      </p>
+      <a
+        href="/ask"
+        class="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
+      >
+        Start Chatting Now
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer
+      class="text-center py-8 text-sm text-gray-400 bg-[#14171c] border-t border-gray-700"
+    >
+      <p>
+        Built with love, by
+        <span class="text-blue-400 font-semibold">UncleTesim</span>
+      </p>
+    </footer>
+
+    <style>
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slide-in {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .animate-fade-in {
+        animation: fade-in 1s ease-out forwards;
+      }
+
+      .animate-slide-in {
+        animation: slide-in 1s ease-out forwards;
+      }
+
+      .animate-slide-up {
+        animation: fade-in 1s ease-out forwards;
+      }
+    </style>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diabetes Assistant</title>
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            typography: {
+              DEFAULT: {
+                css: {
+                  color: "#ffffff",
+                  a: { color: "#94d2bd" },
+                  strong: { color: "#ffffff" },
+                  code: { color: "#94d2bd" },
+                  // add other markdown styles manually here
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 4px solid #94d2bd;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-[#0f172a] text-white font-sans flex flex-col min-h-screen items-center px-4 py-6"
+  >
+    <header class="mb-6 text-center">
+      <img
+        src="{{ url_for('static', filename='favicon.png') }}"
+        alt="logo"
+        class="inline-block w-10 h-10 mr-2 align-middle"
+      />
+      <h1 class="inline text-3xl font-bold text-[#94d2bd]">
+        DiaWise: Your Diabetes Assistant
+      </h1>
+    </header>
+
+    <main class="w-full max-w-2xl flex-1 flex flex-col items-center">
+      <div
+        id="chat"
+        class="w-full h-[60vh] overflow-y-auto bg-[#1e293b] rounded-xl p-4 shadow-md mb-4 space-y-4 fade-in"
+      ></div>
+
+      <form id="chat-form" class="w-full flex">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Ask me something..."
+          class="flex-grow rounded-l-xl px-4 py-2 text-gray-900 focus:outline-none"
+        />
+        <button
+          type="submit"
+          class="bg-[#94d2bd] hover:bg-[#7fbdae] text-black font-semibold px-4 py-2 rounded-r-xl transition"
+        >
+          Send
+        </button>
+      </form>
+    </main>
+
+    <footer class="mt-6 text-sm text-gray-400 text-center">
+      Built with love, by
+      <span class="text-[#94d2bd] font-semibold">UncleTesim</span>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
