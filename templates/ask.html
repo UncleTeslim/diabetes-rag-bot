@@ -1,113 +1,436 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diabetes Assistant</title>
-
-    <link
-      rel="icon"
-      type="image/png"
-      href="{{ url_for('static', filename='favicon.png') }}"
+    <title>DiaWise – Ask a Question</title>
+    <meta
+      name="description"
+      content="Ask diabetes questions and get evidence-backed answers from DiaWise."
     />
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            typography: {
-              DEFAULT: {
-                css: {
-                  color: "#ffffff",
-                  a: { color: "#94d2bd" },
-                  strong: { color: "#ffffff" },
-                  code: { color: "#94d2bd" },
-                  // add other markdown styles manually here
-                },
-              },
-            },
-          },
-        },
-      };
-    </script>
-
-    <style>
-      .fade-in {
-        animation: fadeIn 0.5s ease-in-out;
-      }
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .spinner {
-        width: 24px;
-        height: 24px;
-        border: 4px solid #94d2bd;
-        border-top: 4px solid transparent;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
+  <body class="app-layout">
+    <!-- ═══════════════════════════════════════════════════════════════
+     APP HEADER
+═══════════════════════════════════════════════════════════════════ -->
+    <header class="dw-app-header" role="banner">
+      <a
+        href="/"
+        class="dw-app-header__brand"
+        aria-label="Return to DiaWise home"
+      >
+        <div class="dw-app-header__logo-ring" aria-hidden="true">
+          <img src="/static/favicon.png" alt="" />
+        </div>
+        <span class="dw-app-header__name">DiaWise</span>
+      </a>
 
-  <body
-    class="bg-[#0f172a] text-white font-sans flex flex-col min-h-screen items-center px-4 py-6"
-  >
-    <header class="mb-6 text-center">
-      <img
-        src="{{ url_for('static', filename='favicon.png') }}"
-        alt="logo"
-        class="inline-block w-10 h-10 mr-2 align-middle"
-      />
-      <h1 class="inline text-3xl font-bold text-[#94d2bd]">
-        DiaWise: Your Diabetes Assistant
-      </h1>
+      <!-- Mode toggle -->
+      <div class="dw-mode-toggle" role="group" aria-label="Answer mode">
+        <button
+          class="dw-mode-toggle__btn active"
+          data-mode="learning"
+          aria-pressed="true"
+          title="Detailed educational answers"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+          Learning
+        </button>
+        <button
+          class="dw-mode-toggle__btn"
+          data-mode="newly_diagnosed"
+          aria-pressed="false"
+          title="Simpler, warmer answers for the newly diagnosed"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            />
+          </svg>
+          Newly diagnosed
+        </button>
+      </div>
+
+      <div class="dw-app-header__actions">
+        <button
+          class="dw-icon-btn"
+          id="dw-evidence-toggle-btn"
+          title="Toggle evidence panel"
+          aria-expanded="false"
+          aria-controls="dw-evidence"
+        >
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span class="dw-app-header__action-label">Sources</span>
+        </button>
+        <button
+          class="dw-icon-btn dw-icon-btn--danger"
+          id="dw-clear-btn"
+          title="Clear conversation"
+          aria-label="Clear all messages"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+          </svg>
+          <span class="dw-app-header__action-label">Clear</span>
+        </button>
+      </div>
     </header>
 
-    <main class="w-full max-w-2xl flex-1 flex flex-col items-center">
-      <div
-        id="chat"
-        class="w-full h-[60vh] overflow-y-auto bg-[#1e293b] rounded-xl p-4 shadow-md mb-4 space-y-4 fade-in"
-      ></div>
+    <!-- ═══════════════════════════════════════════════════════════════
+     APP SHELL — CHAT + EVIDENCE PANEL
+═══════════════════════════════════════════════════════════════════ -->
+    <div class="dw-app-shell">
+      <!-- CHAT PANE -->
+      <div class="dw-chat-pane" role="main" id="dw-chat-pane">
+        <!-- Welcome state (hidden when conversation exists) -->
+        <div class="dw-welcome" id="dw-welcome" aria-live="polite">
+          <div class="dw-welcome__orb" aria-hidden="true">
+            <img src="/static/favicon.png" alt="" />
+          </div>
+          <h2>Ask me anything about diabetes</h2>
+          <p class="dw-welcome__sub">
+            Evidence-backed answers drawn from trusted medical literature.
+            Switch modes above to tune the depth and tone of your answers.
+          </p>
+          <div class="dw-starters" role="list" aria-label="Suggested questions">
+            <button class="dw-starter-chip" role="listitem">
+              What are early signs of type 2 diabetes?
+            </button>
+            <button class="dw-starter-chip" role="listitem">
+              How does insulin resistance work?
+            </button>
+            <button class="dw-starter-chip" role="listitem">
+              What is HbA1c and why does it matter?
+            </button>
+            <button class="dw-starter-chip" role="listitem">
+              Can diet alone control blood sugar?
+            </button>
+          </div>
+        </div>
 
-      <form id="chat-form" class="w-full flex">
-        <input
-          type="text"
-          id="user-input"
-          placeholder="Ask me something..."
-          class="flex-grow rounded-l-xl px-4 py-2 text-gray-900 focus:outline-none"
-        />
+        <!-- Message feed -->
+        <div
+          class="dw-feed"
+          id="dw-feed"
+          role="log"
+          aria-label="Conversation"
+          aria-live="polite"
+          aria-atomic="false"
+        ></div>
+
+        <!-- Follow-up chips (injected by JS) -->
+        <div
+          class="dw-followups"
+          id="dw-followups"
+          aria-label="Suggested follow-up questions"
+          role="list"
+        ></div>
+      </div>
+
+      <!-- EVIDENCE PANEL -->
+      <aside
+        class="dw-evidence"
+        id="dw-evidence"
+        aria-label="Evidence and sources"
+        aria-hidden="true"
+      >
+        <div class="dw-evidence-header">
+          <div class="dw-evidence-header__title">
+            <span class="dw-evidence-dot" aria-hidden="true"></span>
+            Sources
+          </div>
+          <button
+            class="dw-icon-btn dw-evidence-close"
+            id="dw-evidence-close"
+            aria-label="Close sources panel"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="dw-evidence-body" id="dw-evidence-body">
+          <p class="dw-evidence-empty" id="dw-evidence-empty">
+            Sources retrieved for the current answer will appear here.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+     INPUT BAR
+═══════════════════════════════════════════════════════════════════ -->
+    <form
+      class="dw-input-bar"
+      id="dw-form"
+      aria-label="Ask a question"
+      novalidate
+    >
+      <div class="dw-input-wrap" role="presentation">
+        <textarea
+          class="dw-input"
+          id="dw-input"
+          name="question"
+          placeholder="Ask about diabetes…"
+          rows="1"
+          maxlength="2000"
+          aria-label="Your question"
+          autocomplete="off"
+          autocorrect="on"
+          spellcheck="true"
+        ></textarea>
         <button
+          class="dw-send-btn"
           type="submit"
-          class="bg-[#94d2bd] hover:bg-[#7fbdae] text-black font-semibold px-4 py-2 rounded-r-xl transition"
+          id="dw-send-btn"
+          aria-label="Send question"
         >
-          Send
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
         </button>
-      </form>
-    </main>
+      </div>
+      <p class="dw-input-hint">
+        <svg
+          width="11"
+          height="11"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        Educational purposes only &nbsp;·&nbsp; Not medical advice &nbsp;·&nbsp;
+        Enter or Shift+Enter to send
+      </p>
+    </form>
 
-    <footer class="mt-6 text-sm text-gray-400 text-center">
-      Built with love, by
-      <span class="text-[#94d2bd] font-semibold">UncleTesim</span>
-    </footer>
+    <!-- Typing indicator template (cloned by JS) -->
+    <template id="typing-tpl">
+      <div
+        class="dw-msg dw-msg--bot dw-msg--typing"
+        role="status"
+        aria-label="DiaWise is thinking"
+      >
+        <div class="dw-msg__avatar" aria-hidden="true">DW</div>
+        <div class="dw-msg__bubble">
+          <span class="dw-typing" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+        </div>
+      </div>
+    </template>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="/static/script.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+     ONBOARDING OVERLAY
+═══════════════════════════════════════════════════════════════ -->
+    <div
+      class="dw-onboarding"
+      id="dw-onboarding"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="onboarding-title"
+    >
+      <div class="dw-onboarding__card">
+        <div class="dw-onboarding__orb" aria-hidden="true">
+          <img src="/static/favicon.png" alt="" />
+        </div>
+        <h2 id="onboarding-title">Before we begin</h2>
+        <p>
+          A few quick details help DiaWise give you more relevant, personalised
+          answers.
+        </p>
+
+        <form id="dw-onboarding-form" novalidate>
+          <div class="dw-onboarding__field">
+            <label for="ob-name">
+              First name
+              <span class="dw-ob-required" aria-label="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="ob-name"
+              name="name"
+              autocomplete="given-name"
+              placeholder="e.g. Alex"
+              required
+              maxlength="60"
+            />
+            <span class="dw-ob-hint">Used to personalise answers</span>
+          </div>
+
+          <div class="dw-onboarding__field">
+            <label for="ob-age"
+              >Age <span class="dw-ob-optional">(optional)</span></label
+            >
+            <input
+              type="number"
+              id="ob-age"
+              name="age"
+              min="1"
+              max="120"
+              placeholder="e.g. 42"
+            />
+            <span class="dw-ob-hint">Helps tailor age-relevant advice</span>
+          </div>
+
+          <div class="dw-onboarding__field">
+            <label>Gender <span class="dw-ob-optional">(optional)</span></label>
+            <div
+              class="dw-gender-group"
+              role="group"
+              aria-label="Select gender"
+            >
+              <button type="button" class="dw-gender-btn" data-value="male">
+                Male
+              </button>
+              <button type="button" class="dw-gender-btn" data-value="female">
+                Female
+              </button>
+              <button
+                type="button"
+                class="dw-gender-btn"
+                data-value="non-binary"
+              >
+                Non-binary
+              </button>
+              <button
+                type="button"
+                class="dw-gender-btn"
+                data-value="prefer-not-to-say"
+              >
+                Prefer not to say
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary dw-onboarding__submit">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            Start chatting
+          </button>
+
+          <p class="dw-onboarding__privacy">
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            All data stays in your browser only. Nothing is sent to a server.
+          </p>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

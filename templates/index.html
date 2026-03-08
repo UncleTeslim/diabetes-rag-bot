@@ -1,226 +1,527 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome | DiaWise</title>
-    <link rel="icon" href="/static/favicon.png" type="image/x-icon" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>DiaWise – Trusted Diabetes Information, Powered by AI</title>
+    <meta
+      name="description"
+      content="Evidence-grounded answers about diabetes from trusted medical literature. Built for the newly diagnosed, caregivers, and lifelong learners."
+    />
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
-  <body
-    class="bg-gradient-to-b from-[#0f172a] to-[#1A1E24] text-white font-sans min-h-screen flex flex-col justify-between"
-  >
-
-    <main
-      class="flex flex-col items-center justify-center text-center px-6 py-20 space-y-8 animate-fade-in"
-    >
-      <img
-        src="/static/favicon.png"
-        alt="DiaWise Logo"
-        class="w-24 h-24 mb-6 rounded-full border-4 border-blue-300 drop-shadow-lg"
-      />
-      <h1
-        class="text-5xl sm:text-6xl font-extrabold tracking-tight text-blue-300 drop-shadow-xl animate-slide-in"
-      >
-        Welcome to DiaWise
-      </h1>
-      <p
-        class="max-w-2xl text-xl sm:text-2xl text-gray-300 animate-slide-in delay-200"
-      >
-        Your AI companion for trustworthy, helpful, and clear diabetes
-        information. Built with care, for real impact.
-      </p>
-      <a
-        href="/ask"
-        class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in delay-400"
-      >
-        Chat with DiaWise
+  <body>
+    <!-- ═══════════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════════════ -->
+    <nav class="dw-nav" id="dw-nav" aria-label="Main navigation">
+      <a href="/" class="dw-nav__brand" aria-label="DiaWise home">
+        <div class="dw-nav__logo-wrap" aria-hidden="true">
+          <img src="/static/favicon.png" alt="" />
+        </div>
+        DiaWise
       </a>
+      <ul class="dw-nav__links" role="list">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#trust">Our approach</a></li>
+      </ul>
+      <a href="/ask" class="btn btn--primary btn--sm">Start chatting →</a>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════════════ -->
+    <main>
+      <section class="dw-hero" aria-labelledby="hero-title">
+        <div class="dw-hero__grid" aria-hidden="true"></div>
+        <div class="dw-hero__burst" aria-hidden="true"></div>
+
+        <!-- Floating particles injected by JS -->
+        <div
+          class="dw-hero__particles"
+          id="dw-particles"
+          aria-hidden="true"
+        ></div>
+
+        <span class="dw-hero__eyebrow">
+          <span class="badge badge--cyan">
+            <svg
+              width="8"
+              height="8"
+              viewBox="0 0 8 8"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <circle cx="4" cy="4" r="4" />
+            </svg>
+            Live
+          </span>
+          <span
+            style="color: var(--text-2); font-size: 0.8125rem; font-weight: 500"
+            >AI-Powered Diabetes Education</span
+          >
+        </span>
+
+        <h1 class="dw-hero__title" id="hero-title">
+          Diabetes answers,<br />
+          <span class="gradient-text line2">grounded in evidence</span>
+        </h1>
+
+        <p class="dw-hero__subtitle">
+          Whether you were just diagnosed, supporting a loved one, or simply
+          want to understand more, DiaWise gives you clear, source-backed
+          answers from trusted medical literature.
+        </p>
+
+        <div class="dw-hero__actions">
+          <a href="/ask" class="btn btn--primary">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            Ask your first question
+          </a>
+          <a href="#how-it-works" class="btn btn--ghost">See how it works</a>
+        </div>
+
+        <!-- Floating demo preview -->
+        <div class="dw-hero__preview" aria-hidden="true">
+          <div class="dw-preview-card">
+            <div class="dw-preview-card__header">
+              <div
+                class="dw-preview-card__dot"
+                style="background: #ef4444"
+              ></div>
+              <div
+                class="dw-preview-card__dot"
+                style="background: #f59e0b; margin-left: 5px"
+              ></div>
+              <div
+                class="dw-preview-card__dot"
+                style="background: #10b981; margin-left: 5px"
+              ></div>
+              <span style="flex: 1"></span>
+              <span
+                style="
+                  font-size: 0.6875rem;
+                  color: var(--text-3);
+                  font-family: var(--font-body);
+                "
+                >DiaWise · Learning mode</span
+              >
+            </div>
+            <div class="dw-preview-card__body">
+              <div class="dw-preview-msg dw-preview-msg--user">
+                <div class="dw-preview-avatar dw-preview-avatar--user">You</div>
+                <div class="dw-preview-bubble dw-preview-bubble--user">
+                  Can type 2 diabetes actually be reversed?
+                </div>
+              </div>
+              <div class="dw-preview-msg">
+                <div class="dw-preview-avatar dw-preview-avatar--bot">DW</div>
+                <div class="dw-preview-bubble dw-preview-bubble--bot">
+                  Yes, in certain cases,
+                  <strong>type 2 diabetes can enter remission</strong> through
+                  significant weight loss and lifestyle change. Studies show a
+                  low-calorie diet causing >15kg loss leads to remission in ~46%
+                  of patients within one year.
+                  <div>
+                    <span class="dw-preview-source">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 1 2-2V8z"
+                        />
+                        <polyline points="14 2 14 8 20 8" />
+                      </svg>
+                      Textbook of Diabetes, p.312
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p
+          style="
+            margin-top: var(--sp-8);
+            font-size: 0.75rem;
+            color: var(--text-3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: fadeSlideUp 0.8s 0.4s both;
+          "
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Educational use only &nbsp;·&nbsp; Not a replacement for medical
+          advice
+        </p>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+     STATS
+═══════════════════════════════════════════════════════════════════ -->
+      <div class="dw-stats" role="list" aria-label="Key statistics">
+        <div class="dw-stats__item" role="listitem">
+          <div class="dw-stats__value" data-count="537">0</div>
+          <div class="dw-stats__label">
+            Million adults with diabetes worldwide
+          </div>
+        </div>
+        <div class="dw-stats__item" role="listitem">
+          <div class="dw-stats__value">50%</div>
+          <div class="dw-stats__label">Remain undiagnosed globally</div>
+        </div>
+        <div class="dw-stats__item" role="listitem">
+          <div class="dw-stats__value">24/7</div>
+          <div class="dw-stats__label">Available, no appointments needed</div>
+        </div>
+        <div class="dw-stats__item" role="listitem">
+          <div class="dw-stats__value">RAG</div>
+          <div class="dw-stats__label">Retrieval-augmented with citations</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════════════════════════════════ -->
+      <section
+        class="dw-features"
+        id="features"
+        aria-labelledby="features-heading"
+      >
+        <div
+          style="
+            text-align: center;
+            margin-bottom: var(--sp-12);
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          <p class="section-label">What makes DiaWise different</p>
+          <h2 class="section-title" id="features-heading">
+            Not just another AI chatbot
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            Every feature is designed around one purpose: helping people
+            understand and manage diabetes with confidence and clarity.
+          </p>
+        </div>
+        <div class="dw-features__grid">
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">📚</div>
+            <h3>Evidence-grounded answers</h3>
+            <p>
+              Responses draw from curated diabetes medical literature. Every
+              answer shows the exact source document and page. No mystery black
+              box.
+            </p>
+          </div>
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">🎯</div>
+            <h3>Two intelligent modes</h3>
+            <p>
+              Switch between <strong>Learning mode</strong> for rich educational
+              depth, and <strong>Newly Diagnosed</strong> mode for warmer,
+              simpler, reassuring answers at an emotional moment.
+            </p>
+          </div>
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">🔬</div>
+            <h3>Transparent source panel</h3>
+            <p>
+              A live evidence panel sits beside every conversation, showing
+              sources, page numbers, and whether the answer came from the
+              knowledge base or general knowledge.
+            </p>
+          </div>
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">🧠</div>
+            <h3>Persistent memory</h3>
+            <p>
+              Your full chat history is saved locally in your browser. Come back
+              a week later and pick up exactly where you left off. No account,
+              no sign-up, no data uploaded.
+            </p>
+          </div>
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">⚡</div>
+            <h3>Smart follow-up engine</h3>
+            <p>
+              After every answer, DiaWise suggests 2-3 intelligent follow-up
+              questions generated from the context, so your learning deepens
+              naturally without dead ends.
+            </p>
+          </div>
+          <div class="dw-feature-card">
+            <div class="dw-feature-card__icon-wrap" aria-hidden="true">🛡️</div>
+            <h3>Safety-first by design</h3>
+            <p>
+              Emergency keywords trigger immediate escalation to 999/911 before
+              any LLM call. Every answer carries a clear educational disclaimer.
+              Hallucinated citations are structurally prevented.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════════════════════════ -->
+      <section class="dw-how" id="how-it-works" aria-labelledby="how-heading">
+        <div style="text-align: center; margin-bottom: var(--sp-12)">
+          <p class="section-label">Under the hood</p>
+          <h2 class="section-title" id="how-heading">How DiaWise works</h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            Powered by Retrieval-Augmented Generation. Your question is matched
+            to trusted medical documents, then synthesised by a state-of-the-art
+            language model.
+          </p>
+        </div>
+        <div class="dw-how__track" role="list">
+          <div class="dw-step" role="listitem">
+            <div class="dw-step__num" aria-hidden="true">01</div>
+            <div>
+              <h3>You ask, naturally</h3>
+              <p>
+                Type any diabetes question in plain English. No medical jargon
+                required.
+              </p>
+            </div>
+          </div>
+          <div class="dw-step" role="listitem">
+            <div class="dw-step__num" aria-hidden="true">02</div>
+            <div>
+              <h3>Semantic retrieval</h3>
+              <p>
+                Pinecone vector search finds the most relevant passages from our
+                curated diabetes knowledge base.
+              </p>
+            </div>
+          </div>
+          <div class="dw-step" role="listitem">
+            <div class="dw-step__num" aria-hidden="true">03</div>
+            <div>
+              <h3>GPT-4 synthesises</h3>
+              <p>
+                The model generates a clear, accurate answer grounded in the
+                retrieved context, complete with citations.
+              </p>
+            </div>
+          </div>
+          <div class="dw-step" role="listitem">
+            <div class="dw-step__num" aria-hidden="true">04</div>
+            <div>
+              <h3>Sources shown to you</h3>
+              <p>
+                Every answer comes with exact source documents so you can verify
+                and explore further.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+     TRUST
+═══════════════════════════════════════════════════════════════════ -->
+      <section class="dw-trust" id="trust" aria-labelledby="trust-heading">
+        <div class="dw-trust-card">
+          <div class="dw-trust-card__icon-wrap" aria-hidden="true">🔒</div>
+          <div>
+            <p class="section-label" style="margin-bottom: var(--sp-2)">
+              Our commitment
+            </p>
+            <h2
+              class="section-title"
+              style="font-size: 1.625rem; margin-bottom: var(--sp-3)"
+              id="trust-heading"
+            >
+              Safety and trust, by design
+            </h2>
+            <p
+              style="
+                color: var(--text-2);
+                font-size: 0.9375rem;
+                line-height: 1.75;
+              "
+            >
+              DiaWise is an education tool, not a diagnostic service. We believe
+              AI in healthcare must be transparent, humble, and always
+              safety-first. Every answer includes a live source panel, a clear
+              educational disclaimer, and immediate emergency escalation when
+              needed. Your conversation never leaves your device. History is
+              stored only in your browser's localStorage.
+            </p>
+            <div class="dw-trust-pillars">
+              <span class="badge badge--emerald">✓ Source transparency</span>
+              <span class="badge badge--cyan">✓ No server storage</span>
+              <span class="badge badge--emerald">✓ Emergency escalation</span>
+              <span class="badge badge--amber">✓ Educational only</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════════════════════════════ -->
+      <section class="dw-cta" aria-labelledby="cta-heading">
+        <p class="section-label" style="margin-bottom: var(--sp-4)">
+          Get started free
+        </p>
+        <h2 id="cta-heading">
+          Ready to understand<br />
+          <span class="gradient-text">diabetes better?</span>
+        </h2>
+        <p>No sign-up. No account. Just ask.</p>
+        <a
+          href="/ask"
+          class="btn btn--primary"
+          style="font-size: 1.0625rem; padding: 16px 40px"
+        >
+          Start your conversation →
+        </a>
+      </section>
     </main>
 
-
-    <section
-      id="about"
-      class="py-20 px-6 bg-[#1A1E24] text-center animate-fade-in delay-500"
-    >
-      <h2
-        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-6"
-      >
-        About DiaWise
-      </h2>
-      <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">
-        DiaWise is designed to be a reliable and accessible source of diabetes
-        information. Whether you're newly diagnosed or just looking to stay
-        informed, DiaWise provides clear, accurate, and actionable insights
-        powered by AI.
+    <!-- ═══════════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════════════ -->
+    <footer class="dw-footer" role="contentinfo">
+      <span class="dw-footer__brand">DiaWise</span>
+      <p class="dw-footer__disclaimer">
+        DiaWise is an educational tool only and does not provide medical advice,
+        diagnosis, or treatment. Always seek guidance from a qualified
+        healthcare professional for personal medical decisions.
       </p>
-    </section>
-
-  
-    <section
-      id="features"
-      class="bg-[#14171c] py-20 px-6 text-center animate-fade-in delay-700"
-    >
-      <h2
-        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-12"
-      >
-        Features
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
-        <div class="space-y-4 animate-slide-up">
-          <svg
-            class="w-16 h-16 mx-auto text-blue-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 7h3M13 11h3m-3 4h3m3-4v2a9 9 0 11-9 9h2a7 7 0 10 7-7V9a9 9 0 11-9 9H8a7 7 0 1014 0V9z"
-            ></path>
-          </svg>
-          <h3 class="text-2xl font-semibold text-white">Instant Answers</h3>
-          <p class="text-lg text-gray-300">
-            Get fast, reliable answers to your diabetes-related questions.
-          </p>
-        </div>
-        <div class="space-y-4 animate-slide-up delay-200">
-          <svg
-            class="w-16 h-16 mx-auto text-blue-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 12h3l-4 4m0 0l4 4m-4-4l-4-4m0 0h3l-4 4m0 0l-4-4"
-            ></path>
-          </svg>
-          <h3 class="text-2xl font-semibold text-white">Personalized Advice</h3>
-          <p class="text-lg text-gray-300">
-            Receive personalized recommendations based on your specific needs.
-          </p>
-        </div>
-        <div class="space-y-4 animate-slide-up delay-400">
-          <svg
-            class="w-16 h-16 mx-auto text-blue-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 11V6h3V4h5v2h3v5h-3v6h-3v-6h-3z"
-            ></path>
-          </svg>
-          <h3 class="text-2xl font-semibold text-white">24/7 Availability</h3>
-          <p class="text-lg text-gray-300">
-            Access diabetes information anytime, anywhere.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS SECTION -->
-    <section
-      id="testimonials"
-      class="bg-[#0f172a] py-20 px-6 text-center animate-fade-in delay-900"
-    >
-      <h2
-        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-blue-300 mb-6"
-      >
-        What Users Are Saying
-      </h2>
-      <div class="space-y-8">
-        <blockquote class="text-lg text-gray-300">
-          "DiaWise has been a lifesaver! The information is clear, and it’s so
-          easy to use. It has helped me better understand my condition."
-          <br /><span class="text-blue-400 font-semibold">— Sarah M.</span>
-        </blockquote>
-        <blockquote class="text-lg text-gray-300">
-          "The personalized advice I received helped me make better decisions
-          about my diet and lifestyle. Highly recommend!"
-          <br /><span class="text-blue-400 font-semibold">— John P.</span>
-        </blockquote>
-      </div>
-    </section>
-
-    <!-- CALL TO ACTION SECTION -->
-    <section
-      id="cta"
-      class="bg-blue-600 py-20 px-6 text-center animate-fade-in delay-1200"
-    >
-      <h2
-        class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4"
-      >
-        Ready to Get Started?
-      </h2>
-      <p class="text-lg sm:text-xl text-gray-100 mb-6">
-        Chat with DiaWise today and take control of your diabetes journey.
-      </p>
-      <a
-        href="/ask"
-        class="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
-      >
-        Start Chatting Now
-      </a>
-    </section>
-
-    <!-- FOOTER -->
-    <footer
-      class="text-center py-8 text-sm text-gray-400 bg-[#14171c] border-t border-gray-700"
-    >
-      <p>
-        Built with love, by
-        <span class="text-blue-400 font-semibold">UncleTesim</span>
-      </p>
+      <span class="dw-footer__right">Built by UncleTesim</span>
     </footer>
 
-    <style>
-      @keyframes fade-in {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
+    <script>
+      // Nav scroll effect
+      const nav = document.getElementById("dw-nav");
+      window.addEventListener(
+        "scroll",
+        () => {
+          nav.classList.toggle("scrolled", window.scrollY > 20);
+        },
+        { passive: true },
+      );
+
+      // Animated particles
+      (function () {
+        const container = document.getElementById("dw-particles");
+        if (!container) return;
+        const count = 18;
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+          const size = Math.random() * 3 + 1.5;
+          const left = Math.random() * 100;
+          const dx = (Math.random() - 0.5) * 120;
+          const dur = 10 + Math.random() * 14;
+          const delay = Math.random() * -dur;
+          p.style.cssText = `width:${size}px;height:${size}px;left:${left}%;--dx:${dx}px;--dur:${dur}s;--delay:${delay}s;`;
+          container.appendChild(p);
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+      })();
 
-      @keyframes slide-in {
-        from {
-          opacity: 0;
-          transform: translateX(-50px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
+      // Counter animation for stats
+      (function () {
+        const counters = document.querySelectorAll("[data-count]");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target;
+              const target = parseInt(el.dataset.count, 10);
+              const suffix = el.dataset.suffix || "M+";
+              let start = 0;
+              const duration = 1600;
+              const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(ease * target) + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+              };
+              requestAnimationFrame(step);
+              observer.unobserve(el);
+            });
+          },
+          { threshold: 0.5 },
+        );
+        counters.forEach((c) => {
+          c.dataset.suffix = c.dataset.suffix || "M+";
+          observer.observe(c);
+        });
+      })();
 
-      .animate-fade-in {
-        animation: fade-in 1s ease-out forwards;
-      }
-
-      .animate-slide-in {
-        animation: slide-in 1s ease-out forwards;
-      }
-
-      .animate-slide-up {
-        animation: fade-in 1s ease-out forwards;
-      }
-    </style>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+      // Scroll-triggered fade-in for sections
+      (function () {
+        const els = document.querySelectorAll(
+          ".dw-feature-card, .dw-step, .dw-stats__item",
+        );
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry, i) => {
+              if (entry.isIntersecting) {
+                const el = entry.target;
+                el.style.animation = `fadeSlideUp .55s ${i * 0.07}s both`;
+                observer.unobserve(el);
+              }
+            });
+          },
+          { threshold: 0.1 },
+        );
+        // Initially hide them
+        els.forEach((el) => {
+          el.style.opacity = "0";
+          observer.observe(el);
+        });
+      })();
+    </script>
   </body>
 </html>

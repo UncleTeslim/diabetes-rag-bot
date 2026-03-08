@@ -1,7 +1,6 @@
-Flask
+Flask>=3.0
 python-dotenv
 pinecone
-pinecone-client
 langchain
 langchain_community
 langchain_huggingface
@@ -9,5 +8,4 @@ langchain-openai
 langchain-pinecone
 langchain-core
 langgraph
-uuid
 gunicorn

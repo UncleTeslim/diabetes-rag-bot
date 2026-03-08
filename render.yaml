@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: diawise
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false # set manually in Render dashboard
+      - key: PINECONE_API_KEY
+        sync: false # set manually in Render dashboard
+      - key: SECRET_KEY
+        generateValue: true # Render generates and persists this automatically

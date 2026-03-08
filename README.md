@@ -1,142 +1,149 @@
-# 🩺 DiaWise – Diabetes Question Answering Chat App (RAG-based)
+# DiaWise – Evidence-Grounded Diabetes Education Assistant
 
-DiaWise is a Retrieval-Augmented Generation (RAG) powered web application designed to answer natural language questions about **diabetes**. It leverages **LangChain**, **OpenAI's GPT-4** (or Gemini), and **Pinecone** vector store to retrieve accurate information from a curated PDF dataset of diabetes-related medical content (e.g. NIH or textbooks).
-
----
-
-## 📌 Features
-
-- ✅ Ask free-form questions like "Can a diabetic person have a baby?" or "What causes diabetes?"
-- 🔍 Contextual answers based on your diabetes PDF knowledge base
-- 🤖 Uses LLMs (GPT-4o / Gemini) with vector search (Pinecone)
-- ⚙️ Streamlined Flask backend + HTML/JS frontend
-- 🪶 Lightweight and minimal — perfect for hosting or demos
+> A world-class RAG prototype that gives patients, caregivers, and the newly diagnosed clear, source-backed answers about diabetes — powered by GPT-4, LangChain, and Pinecone.
 
 ---
 
-## 🧠 Tech Stack
+## What makes this different
 
-| Layer        | Tech Used                                                                                                                                           |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Frontend     | HTML, CSS, JavaScript (Fetch API)                                                                                                                   |
-| Backend      | Python, Flask                                                                                                                                       |
-| LLM & RAG    | LangChain, OpenAI                                                                                                                                   |
-| Embeddings   | OpenAI Embeddings                                                                                                                                   |
-| Vector Store | Pinecone                                                                                                                                            |
-| Data Source  | PDF documents on diabetes (Textbook of diabetes, https://www.blackwellpublishing.com/content/textbookofdiabetes/downloads/chapters/allchapters.pdf) |
-| Deployment   | Render / localhost                                                                                                                                  |
+Most AI health tools are just ChatGPT wrappers. DiaWise is different:
+
+| Feature | Generic chatbot | DiaWise |
+|---|---|---|
+| Source transparency | None | Every answer shows exact source docs/pages |
+| Knowledge scope | Anything | Only diabetes-grade medical literature |
+| Safety guardrails | Minimal | Emergency escalation, educational disclaimers |
+| Mode-aware answers | No | Learning mode vs Newly Diagnosed mode |
+| Conversation memory | Session only | Persisted in localStorage (no login needed) |
+| Follow-up intelligence | No | AI-generated follow-up question suggestions |
 
 ---
 
----
+## Architecture
 
-## 🛠️ Setup Instructions
+```
+User
+  │
+  ▼
+Flask /ask endpoint
+  │
+  ├── Input validation (length, empty, mode)
+  │
+  ├── Emergency keyword fast-path → immediate safety response
+  │
+  ├── RAG Chain (primary)
+  │     Pinecone vector search (k=4)
+  │       └── GPT-4.1-mini with system_prompt + retrieved context
+  │             └── Structured output: answer + SOURCES: + FOLLOWUPS:
+  │
+  └── LangGraph conversational memory (fallback if RAG errors)
 
-### 1. Clone the Repo
+Response: { answer, sources[], followups[], safety_note, mode, retrieved }
 
-```bash
-git clone https://github.com/yourusername/diabeticbot.git
-cd diabeticbot
+Frontend
+  ├── Two-pane layout: chat (left) + evidence panel (right)
+  ├── Source cards: green (retrieved) / amber (general knowledge)
+  ├── Follow-up chips: clickable suggestions in evidence panel
+  ├── Mode toggle: 📚 Learning | 🩺 Newly Diagnosed
+  ├── LocalStorage persistence: chat history + mode preference
+  └── Emergency styling, aria-live, keyboard accessible
 ```
 
-### 2. Create & Activate Conda/Virtual Environment
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | HTML, CSS (custom design system), vanilla JS |
+| Backend | Python 3.10, Flask |
+| LLM | OpenAI GPT-4.1-mini |
+| Embeddings | HuggingFace all-MiniLM-L6-v2 |
+| RAG | LangChain + LangGraph |
+| Vector Store | Pinecone (serverless) |
+| Deployment | Render / Docker |
+
+---
+
+## Setup
+
+### 1. Clone and install
 
 ```bash
-conda create -n diabeticbot python=3.10 -y
-conda activate diabeticbot
-```
-
-### 3. Install Requirements
-
-```bash
+git clone https://github.com/yourusername/diawise.git
+cd diawise
 pip install -r requirements.txt
 ```
 
-### 4. Set Up Environment Variables
+### 2. Environment variables
 
-Create a .env file in the root directory:
+Create `.env`:
 
 ```env
-OPENAI_API_KEY=your_openai_key_here
-PINECONE_API_KEY=your_pinecone_key_here
-PINECONE_ENV=your_pinecone_env
-PINECONE_INDEX_NAME=your_index_name
+OPENAI_API_KEY=your_key
+PINECONE_API_KEY=your_key
+PINECONE_INDEX_NAME=diabetesbot
+SECRET_KEY=your_random_secret
 ```
 
-### 5. Run the App
+### 3. Index your documents (first time only)
+
+```bash
+python src/store_index.py
+```
+
+### 4. Run
 
 ```bash
 python app.py
 ```
 
-## 🧪 How It Works
-
-1. **PDF is loaded** and split into chunks using `PyPDFLoader`.
-2. **Embeddings** are generated via OpenAI's embedding model.
-3. The chunks are stored in **Pinecone** vector database with metadata.
-4. When the user asks a question:
-   - The app retrieves top relevant chunks from Pinecone using semantic search.
-   - LangChain passes these chunks and the question to the LLM as context.
-   - The LLM (OpenAI GPT-4 or Gemini) generates a context-aware response.
-5. The answer is returned and shown in the web interface as coming from **DiabeticBot**.
-
 ---
 
-## 📝 Example Questions
+## API contract
 
-- What are the symptoms of diabetes?
-- Can diabetes affect pregnancy?
-- How do you manage type 2 diabetes naturally?
-- What foods should a diabetic avoid?
+**POST /ask**
 
----
-
-## 📦 Sample Output
-
-**Input:**  
-can a diabetic person make baby?
-
-**Output:**
-
-```makefile
-**Output:**
+Request:
+```json
+{ "question": "What causes type 2 diabetes?", "mode": "learning" }
 ```
 
-DiabeticBot: Yes, individuals with diabetes can have children. However, managing blood glucose levels before and during pregnancy is crucial to reduce risks for both the parent and the baby.
+Response:
+```json
+{
+  "answer": "Type 2 diabetes develops when...",
+  "sources": ["Textbook of Diabetes, p.42", "Textbook of Diabetes, p.51"],
+  "followups": ["How is type 2 diabetes diagnosed?", "Can it be reversed?"],
+  "safety_note": "For educational purposes only...",
+  "mode": "learning",
+  "retrieved": true
+}
+```
 
 ---
 
-## ⚙️ Deployment (Optional)
+## Product decisions
 
-You can deploy the app using:
+### Target user
+Newly diagnosed adults and their caregivers in the first 90 days post-diagnosis — when information need is highest and confusion is greatest.
 
-- **Render**: Docker-free, simple Python app deployment
-- **Railway** or **Replit**: Good for fast previews and prototyping
-- **Azure App Services / GCP App Engine**: Ideal for enterprise environments
+### North-star metric
+`% of sessions where a cited answer is shown` (retrieval hit rate as a quality proxy)
 
-### Deployment Checklist:
+### Intentional non-features
+- No login / signup — localStorage is sufficient for a prototype
+- No voice input — keeps scope focused
+- No telemetry — trust through privacy
 
-- Store all API keys in environment variables or secrets manager
-- Replace localhost URLs with environment-aware ones
-- Remove Flask debug mode for production
-- Consider enabling HTTPS and CORS
-
----
-
-## ✅ Future Improvements
-
-- [ ] Add user authentication with session/token support
-- [ ] Store question history and allow revisiting previous queries
-- [ ] Switch to local vector DB (e.g., FAISS or ChromaDB) for full open-source setup
-- [ ] Add audio input/output (voice mode)
-- [ ] Progressive Web App (PWA) version for mobile access
+### Safety principles
+1. Educational only — never diagnosis or prescription
+2. Emergency escalation — immediate 999/911 routing for crisis keywords
+3. Source transparency — every answer shows where it came from
+4. No hallucinated citations — if no document found, says so explicitly
 
 ---
 
----
+## License
 
-## 📄 License
-
-This project is licensed under the **MIT License**. See `LICENSE` file for details.
-
----
+MIT. See `LICENSE`.

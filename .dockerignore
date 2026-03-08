@@ -1,0 +1,13 @@
+.git
+.gitignore
+.dockerignore
+.env
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.ipynb
+data/
+test.md
+README.md
+DIAWISE_CASE_STUDY.txt

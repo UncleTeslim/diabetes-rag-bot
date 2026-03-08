@@ -14,12 +14,7 @@ texts_chunks = text_splitter(data=extracted_data)
 embeddings = download_embeddings()
 
 
-
-
-from pinecone import Pinecone, ServerlessSpec
-
 pc = Pinecone(api_key= PINECONE_API_KEY)
-
 
 index_name =  "diabetesbot"
 
