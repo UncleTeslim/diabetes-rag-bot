@@ -7,9 +7,9 @@ from typing import Dict
 from dotenv import load_dotenv
 from flask import (Flask, Response, render_template, request, session,
                    stream_with_context)
-from langchain.globals import set_llm_cache
-from langchain.prompts import ChatPromptTemplate
-from langchain_community.cache import InMemoryCache
+from langchain_core.caches import InMemoryCache
+from langchain_core.globals import set_llm_cache
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
