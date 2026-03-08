@@ -4,6 +4,7 @@ services:
     runtime: docker
     plan: free
     healthCheckPath: /health
+    dockerCommand: gunicorn --worker-class gthread --threads 4 --timeout 120 --bind 0.0.0.0:$PORT app:app
     envVars:
       - key: OPENAI_API_KEY
         sync: false # set manually in Render dashboard

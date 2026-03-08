@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import threading
 import uuid
 from typing import Dict
 
@@ -41,38 +42,49 @@ llm = ChatOpenAI(
     streaming=True,
 )
 
-# Embeddings + Vector Store
-embeddings = download_embeddings()
-index_name = "diabetesbot"
-
-docsearch = PineconeVectorStore.from_existing_index(
-    index_name=index_name,
-    embedding=embeddings,
-)
-retriever = docsearch.as_retriever(
-    search_type="similarity",
-    search_kwargs={"k": 4},
-)
-
-# RAG prompt template
+# RAG prompt template (cheap to build — no network calls)
 rag_prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{input}"),
 ])
 
-# Conversational memory fallback graph
-memory_graph = StateGraph(state_schema=MessagesState)
+# ── Lazy initialization ────────────────────────────────────────────────────
+# download_embeddings() pulls a ~90 MB model; PineconeVectorStore hits the
+# network.  Running these at import time blocks every gunicorn worker from
+# starting, preventing port-binding and failing Render health checks.
+# They are initialised once on the first real request instead.
+_init_lock = threading.Lock()
+_retriever = None
+_workflow = None
 
-def call_model(state: MessagesState) -> Dict:
-    sys_msg = SystemMessage(content=system_prompt_no_context)
-    response = llm.invoke([sys_msg] + state["messages"])
-    return {"messages": [response]}
 
-memory_graph.add_node("model", call_model)
-memory_graph.add_edge(START, "model")
-memory_graph.add_edge("model", END)
-memory = MemorySaver()
-workflow = memory_graph.compile(checkpointer=memory)
+def _ensure_initialized() -> None:
+    global _retriever, _workflow
+    if _retriever is not None:
+        return
+    with _init_lock:
+        if _retriever is not None:  # double-checked
+            return
+        embeddings = download_embeddings()
+        docsearch = PineconeVectorStore.from_existing_index(
+            index_name="diabetesbot",
+            embedding=embeddings,
+        )
+        _retriever = docsearch.as_retriever(
+            search_type="similarity",
+            search_kwargs={"k": 4},
+        )
+        g = StateGraph(state_schema=MessagesState)
+
+        def _call_model(state: MessagesState) -> Dict:
+            sys_msg = SystemMessage(content=system_prompt_no_context)
+            response = llm.invoke([sys_msg] + state["messages"])
+            return {"messages": [response]}
+
+        g.add_node("model", _call_model)
+        g.add_edge(START, "model")
+        g.add_edge("model", END)
+        _workflow = g.compile(checkpointer=MemorySaver())
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -221,7 +233,8 @@ def ask():
         retrieved_docs = []
 
         try:
-            retrieved_docs = retriever.invoke(augmented)
+            _ensure_initialized()
+            retrieved_docs = _retriever.invoke(augmented)
             context_str    = "\n\n".join(doc.page_content for doc in retrieved_docs)
             messages       = rag_prompt.format_messages(
                 context=context_str, input=augmented
@@ -260,7 +273,7 @@ def ask():
             # ── Fallback: LangGraph memory graph ───────────────────────
             try:
                 thread   = {"configurable": {"thread_id": session_id}}
-                fallback = workflow.invoke(
+                fallback = _workflow.invoke(
                     {"messages": [HumanMessage(content=augmented)]}, thread
                 )
                 raw    = fallback["messages"][-1].content
