@@ -1,7 +1,6 @@
 import json
 import os
 import re
-import threading
 import uuid
 from typing import Dict
 
@@ -35,10 +34,10 @@ app.secret_key = os.getenv("SECRET_KEY", os.urandom(32))
 
 # LLM (streaming=True enables token-by-token generation)
 llm = ChatOpenAI(
-    temperature=0.4,
+    temperature=0.7,
     model="gpt-4.1-mini",
     openai_api_key=OPENAI_API_KEY,
-    max_tokens=1500,
+    max_tokens=800,
     streaming=True,
 )
 
@@ -48,43 +47,30 @@ rag_prompt = ChatPromptTemplate.from_messages([
     ("human", "{input}"),
 ])
 
-# ── Lazy initialization ────────────────────────────────────────────────────
-# download_embeddings() pulls a ~90 MB model; PineconeVectorStore hits the
-# network.  Running these at import time blocks every gunicorn worker from
-# starting, preventing port-binding and failing Render health checks.
-# They are initialised once on the first real request instead.
-_init_lock = threading.Lock()
-_retriever = None
-_workflow = None
+# ── Initialization (runs at startup) ─────────────────────────────────────
+_embeddings = download_embeddings()
+_docsearch = PineconeVectorStore.from_existing_index(
+    index_name="diabetesbot",
+    embedding=_embeddings,
+)
+_retriever = _docsearch.as_retriever(
+    search_type="similarity",
+    search_kwargs={"k": 4},
+)
+
+_g = StateGraph(state_schema=MessagesState)
 
 
-def _ensure_initialized() -> None:
-    global _retriever, _workflow
-    if _retriever is not None:
-        return
-    with _init_lock:
-        if _retriever is not None:  # double-checked
-            return
-        embeddings = download_embeddings()
-        docsearch = PineconeVectorStore.from_existing_index(
-            index_name="diabetesbot",
-            embedding=embeddings,
-        )
-        _retriever = docsearch.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": 4},
-        )
-        g = StateGraph(state_schema=MessagesState)
+def _call_model(state: MessagesState) -> Dict:
+    sys_msg = SystemMessage(content=system_prompt_no_context)
+    response = llm.invoke([sys_msg] + state["messages"])
+    return {"messages": [response]}
 
-        def _call_model(state: MessagesState) -> Dict:
-            sys_msg = SystemMessage(content=system_prompt_no_context)
-            response = llm.invoke([sys_msg] + state["messages"])
-            return {"messages": [response]}
 
-        g.add_node("model", _call_model)
-        g.add_edge(START, "model")
-        g.add_edge("model", END)
-        _workflow = g.compile(checkpointer=MemorySaver())
+_g.add_node("model", _call_model)
+_g.add_edge(START, "model")
+_g.add_edge("model", END)
+_workflow = _g.compile(checkpointer=MemorySaver())
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -233,7 +219,6 @@ def ask():
         retrieved_docs = []
 
         try:
-            _ensure_initialized()
             retrieved_docs = _retriever.invoke(augmented)
             context_str    = "\n\n".join(doc.page_content for doc in retrieved_docs)
             messages       = rag_prompt.format_messages(
