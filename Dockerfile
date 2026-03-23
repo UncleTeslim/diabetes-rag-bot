@@ -6,14 +6,11 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download the embedding model so it's cached in the image layer.
-# This avoids a ~90MB download on every cold start, which was causing
-# "No open ports detected" warnings on Render.
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
-
-# Render injects $PORT at runtime (default 10000); expose it so Render detects it immediately
+# Railway injects $PORT at runtime (default 10000)
 EXPOSE 10000
 
-# gthread workers handle concurrent SSE streams without monkey-patching
-# Shell form so $PORT (injected by Render) is expanded at runtime
-CMD gunicorn --worker-class gthread --threads 4 --timeout 120 --bind 0.0.0.0:$PORT app:app
+# Ensure the startup script is executable
+RUN chmod +x start.sh
+
+# start.sh: (1) verifies/builds the Pinecone index, (2) launches gunicorn
+CMD ["bash", "start.sh"]

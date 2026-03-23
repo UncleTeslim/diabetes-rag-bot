@@ -58,6 +58,16 @@ _retriever = _docsearch.as_retriever(
     search_kwargs={"k": 4},
 )
 
+# ── Connection warmup ─────────────────────────────────────────────────────
+# Embed a dummy string at startup so the OpenAI HTTP connection is already
+# established and pooled before the first real user question arrives.
+# Cost: ~1 API call with a tiny string — negligible.
+try:
+    _embeddings.embed_query("warmup")
+    app.logger.info("Connection warmup complete — ready to serve.")
+except Exception as _warmup_err:
+    app.logger.warning("Warmup embedding failed (non-fatal): %s", _warmup_err)
+
 _g = StateGraph(state_schema=MessagesState)
 
 

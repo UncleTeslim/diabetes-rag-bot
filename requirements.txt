@@ -3,9 +3,10 @@ python-dotenv
 pinecone>=5.0
 langchain>=0.3.0,<0.4
 langchain_community>=0.3.0,<0.4
-langchain_huggingface>=0.1.0,<0.2
 langchain-openai>=0.2.0,<0.3
 langchain-pinecone>=0.2.0,<0.3
 langchain-core>=0.3.0,<0.4
+langchain-text-splitters>=0.3.0,<0.4
 langgraph>=0.2.0,<0.3
 gunicorn
+pypdf

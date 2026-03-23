@@ -1,7 +1,8 @@
-from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+import os
 
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def load_file(data):
@@ -33,10 +34,11 @@ def text_splitter(data):
 
 def download_embeddings():
     """
-    Downloads the embeddings model from Hugging Face.
+    Returns OpenAI text-embedding-3-small (1536-dim).
+    Uses the OPENAI_API_KEY env var — no local model, no torch.
     """
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        # model_kwargs={"device": "cuda"}
+    embeddings = OpenAIEmbeddings(
+        model="text-embedding-3-small",
+        openai_api_key=os.getenv("OPENAI_API_KEY"),
     )
     return embeddings

@@ -1,46 +1,28 @@
-from src.helpers import load_file, text_splitter, download_embeddings
-from pinecone import Pinecone, ServerlessSpec
-from langchain_pinecone import PineconeVectorStore
+"""
+src/store_index.py — Legacy index builder (kept for backward compatibility).
+
+This module no longer runs automatically on import.
+Use build_index.py at the project root instead:
+
+  python build_index.py          # smart skip if already populated
+  python build_index.py --force  # force full rebuild after adding PDFs
+"""
+
 import os
-from dotenv import load_dotenv
+import sys
 
 
-load_dotenv()
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+def main() -> None:
+    # Ensure the project root (parent of src/) is on sys.path so that
+    # build_index.py can be imported when this file is run directly.
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if root not in sys.path:
+        sys.path.insert(0, root)
 
-extracted_data= load_file(data = 'data/')
-texts_chunks = text_splitter(data=extracted_data)
-embeddings = download_embeddings()
+    from build_index import build  # noqa: PLC0415
 
-
-pc = Pinecone(api_key= PINECONE_API_KEY)
-
-index_name =  "diabetesbot"
-
-# pc.create_index(
-#     name=index_name,
-#     dimension=384, 
-#     metric="cosine",
-#     spec=ServerlessSpec(
-#         cloud="aws",
-#         region="us-east-1"
-#     ) 
-# )
+    build(force=True)
 
 
-# #Load existing index
-
-from langchain_pinecone import PineconeVectorStore
-
-docsearch = PineconeVectorStore.from_existing_index(
-    index_name=index_name,
-    embedding=embeddings,
-)
-
-
-docsearch = PineconeVectorStore.from_documents(
-    documents=texts_chunks,
-    index_name=index_name,
-    embedding=embeddings,
-)
+if __name__ == "__main__":
+    main()

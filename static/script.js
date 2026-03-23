@@ -323,8 +323,8 @@
     inputEl.style.height = 'auto';
     setLoading(true);
 
-    // Create a live streaming bubble
-    const { container: bubbleContainer, textEl } = createStreamingBubble();
+    // Create a live streaming bubble (with typing indicator until first token)
+    let { container: bubbleContainer, textEl, typingEl } = createStreamingBubble();
     let accumulatedText = '';
 
     try {
@@ -366,6 +366,8 @@
           }
 
           if (event.token) {
+            // Remove typing indicator the moment the first token arrives
+            if (typingEl) { typingEl.remove(); typingEl = null; }
             accumulatedText += event.token;
             // Plain text during streaming for performance
             textEl.textContent = accumulatedText;
@@ -406,7 +408,7 @@
   }
 
   // ── Bubble helpers ────────────────────────────────────────────────
-  /** Creates a bot bubble with a text node for live streaming into */
+  /** Creates a bot bubble with a typing indicator + text node for live streaming into */
   function createStreamingBubble() {
     const container = document.createElement('div');
     container.className = 'dw-msg dw-msg--bot';
@@ -420,6 +422,12 @@
     const bubble = document.createElement('div');
     bubble.className = 'dw-msg__bubble dw-msg__bubble--streaming';
 
+    // Typing indicator — shown while waiting for first token, then removed
+    const typingEl = document.createElement('div');
+    typingEl.className = 'dw-typing';
+    typingEl.innerHTML = '<span></span><span></span><span></span>';
+    bubble.appendChild(typingEl);
+
     const textEl = document.createTextNode('');
     bubble.appendChild(textEl);
 
@@ -427,7 +435,7 @@
     container.appendChild(bubble);
     feedEl.appendChild(container);
     scrollBottom();
-    return { container, textEl };
+    return { container, textEl, typingEl };
   }
 
   function appendUserBubble(text, save) {
